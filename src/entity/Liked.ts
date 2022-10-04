@@ -11,11 +11,17 @@ export class Liked extends BaseEntity {
   @Column()
   PostId: number;
 
-  @ManyToOne(() => Users, (users) => users.Liked)
+  @ManyToOne(() => Users, (users) => users.Liked, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'UserId', referencedColumnName: 'id' })
   User: Users;
 
-  @ManyToOne(() => Posts, (posts) => posts.Liked)
+  @ManyToOne(() => Posts, (posts) => posts.Liked, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'PostId', referencedColumnName: 'id' })
   Post: Posts;
 }

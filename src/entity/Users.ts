@@ -3,6 +3,7 @@ import { BaseEntity } from './BaseEntity';
 import { Comments } from './Comments';
 import { Follow } from './Follow';
 import { Liked } from './Liked';
+import { Posts } from './Posts';
 
 @Entity()
 export class Users extends BaseEntity {
@@ -26,4 +27,7 @@ export class Users extends BaseEntity {
 
   @OneToMany(() => Follow, (follow) => follow.followingUser)
   Following: Follow[];
+
+  @OneToMany(() => Posts, (posts) => posts.User)
+  Post: Posts[];
 }

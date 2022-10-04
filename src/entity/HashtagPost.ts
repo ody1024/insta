@@ -11,11 +11,17 @@ export class HashtagPost extends BaseEntity {
   @Column()
   PostId: number;
 
-  @ManyToOne(() => Hashtag, (hashtag) => hashtag.HashtagPost)
+  @ManyToOne(() => Hashtag, (hashtag) => hashtag.HashtagPost, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'HashtagId', referencedColumnName: 'id' })
   Hashtag: Hashtag;
 
-  @ManyToOne(() => Posts, (posts) => posts.HashtagPost)
+  @ManyToOne(() => Posts, (posts) => posts.HashtagPost, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'PostId', referencedColumnName: 'id' })
-  Post: Posts[];
+  Post: Posts;
 }

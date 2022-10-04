@@ -3,9 +3,11 @@ import {
   UseGuards,
   Post,
   Body,
-  NotFoundException,
   ForbiddenException,
   Response,
+  Param,
+  ParseIntPipe,
+  Get,
 } from '@nestjs/common';
 import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 import { LoggedInGuard } from 'src/auth/logged-in.guard';
@@ -28,11 +30,6 @@ export class UsersController {
   @UseGuards(NotLoggedInGuard)
   @Post()
   async join(@Body() data: JoinRequestDto) {
-    const user = this.usersService.findByEmail(data.email);
-    console.log(user);
-    if (!user) {
-      throw new NotFoundException();
-    }
     const result = await this.usersService.join(
       data.email,
       data.nickname,
@@ -50,5 +47,28 @@ export class UsersController {
   async logout(@Response() res) {
     res.clearCookie('connect.sid', { httpOnly: true });
     return res.send('ok');
+  }
+
+  @UseGuards(LoggedInGuard)
+  @Post(':followingId/follow')
+  async follow(
+    @Param('followingId', ParseIntPipe) followingId: number,
+    @User() user: Users,
+  ) {
+    return this.usersService.follow(user.id, followingId);
+  }
+
+  @UseGuards(LoggedInGuard)
+  @Get('following')
+  async getFollowing(@User() user: Users) {
+    const result = await this.usersService.getFollowing(user.id);
+    return result ? result : 0;
+  }
+
+  @UseGuards(LoggedInGuard)
+  @Get('follower')
+  async getFollower(@User() user: Users) {
+    const result = await this.usersService.getFollower(user.id);
+    return result ? result : 0;
   }
 }

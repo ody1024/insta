@@ -10,7 +10,10 @@ export class Images extends BaseEntity {
   @Column()
   PostId: number;
 
-  @ManyToOne(() => Posts, (posts) => posts.Image)
+  @ManyToOne(() => Posts, (posts) => posts.Image, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'PostId', referencedColumnName: 'id' })
   Post: Posts;
 }
